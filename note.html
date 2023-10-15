@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="scripts/svg.js"></script>
+    <script src="library/editorjs.umd.js"></script>
+    <script src="library/husky.js"></script>
+    <script src="library/header.js"></script>
+    <script src="library/nested-list.js"></script>
+    <script src="library/checklist.js"></script>
+    <script src="library/quote.js"></script>
+    <script src="library/code.js"></script>
+    <script src="library/simple-image.js"></script>
+    <script src="library/editorjs-undo.js"></script>
+    
+    <script src="library/mousetrap/mousetrap.min.js"></script>
+
+    <script src="library/jexcel/jexcel.js"></script>
+    <script src="library/jexcel/jsuites.js"></script>
+    <link rel="stylesheet" href="library/jexcel/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="library/jexcel/jexcel.css" type="text/css" />
+    <style>
+        #inputName {
+            border: 2px solid #999999;
+            border-radius: 16px;
+            padding: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        #inputName:focus {
+            border: 2px solid black;
+        }
+        #input_name {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            -webkit- transform: translateY(-50%) translateX(-50%);
+        }
+        
+        .original-button {
+            margin: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+            border-radius: 20px;
+            width: 120px;
+            height: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            background-color: #222222;
+        }
+        .original-button:hover {
+            opacity: .7;
+        }
+        .input-container {
+            display: flex;
+        }
+
+        .left-input {
+            flex: 1;
+            text-align: left;
+        }
+
+        .center-input {
+            flex: 1;
+            text-align: center;
+        }
+
+        .right-input {
+            flex: 1;
+            text-align: right;
+        }
+      .header{
+            border: 2px solid #999999;
+            border-radius: 16px;
+            padding: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+      .header:focus {
+            border: 2px solid black;
+        }
+        .huskyInput{
+            height: 200px;
+            font-size: 15pt;
+            width: 100%;
+        }
+        @media print{
+            .ce-toolbar__actions{
+                display: none;
+            }
+            .input-container{
+                display: none;
+            }
+        }
+        
+
+    </style>
+</head>
+
+<body>
+    <div id="input_name" style="display:none;">
+        <center>
+            <h1>
+                Please enter a title
+            </h1>
+            <input id="inputName" type="text" placeholder="Title">
+            <a href="javascript:saveNewFile();" class="original-button" id="get_name">OK</a>
+        </center>
+    </div>
+    <div class="input-container" id="header">
+        <input class="left-input header" type="text" id="leftHead">
+        <input class="center-input header" type="text" id="centerHead">
+        <input class="right-input header" type="text" id="rightHead">
+    </div>
+    <div id="editor"></div>
+    <script src="scripts/note_render.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const dataValue = urlParams.get('data');
+        let id = Number(urlParams.get('id'));
+        const windowID = urlParams.get('windowID');
+        document.getElementById("leftHead").value=urlParams.get('left');
+        document.getElementById("centerHead").value=urlParams.get('center');
+        document.getElementById("rightHead").value=urlParams.get('right');
+        const editor = new EditorJS({
+            holder: 'editor',
+            onReady: () => {
+                new Undo({ editor });
+            },
+            
+            tools: {
+                header: {
+                    class: Header,
+                    shortcut: 'CMD+SHIFT+H',
+                },
+                list: {
+                    class: NestedList,
+                    inlineToolbar: true,
+                    config: {
+                        defaultStyle: 'unordered'
+                    },
+                    shortcut: 'CMD+SHIFT+L',
+                },
+                pcr: PCR,
+                spread_sheet: Jspreadsheet,
+                image: SimpleImage,
+                checklist: Checklist,
+                quote: Quote,
+                code: CodeTool,
+            },
+            data:JSON.parse(dataValue)
+        });
+    </script>
+</body>
+
+</html>
