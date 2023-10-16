@@ -11,12 +11,15 @@ function createDirectoryIfNotExists(dirPath) {
 
 
 const sqlite3 = require('sqlite3').verbose();
-const { app, BrowserWindow, ipcMain , Menu, dialog} = require('electron');
+const { app, BrowserWindow, ipcMain , Menu, dialog, shell} = require('electron');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 const { time } = require('console');
 const { title } = require('process');
 const {resolve} = require('path');
+const Store = require('electron-store');
+const store = new Store();
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'database'));
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'data'));
 const db = new sqlite3.Database(path.join(app.getPath('appData'), 'database', 'database'));

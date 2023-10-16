@@ -48,7 +48,8 @@
     "axios": "^1.5.1",
     "editorjs-undo": "^2.0.23",
     "electron": "^26.2.4",
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+    "electron-store": "^8.1.0"
   },
   "dependencies": {
     "sqlite3": "^5.1.6"
