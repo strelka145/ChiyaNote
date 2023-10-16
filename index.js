@@ -294,6 +294,32 @@ function addData(data){
   db.run(query, [data.id, data.path, data.name, data.maintext, data.right, data.center, data.left]);
 }
 
+//Check for the latest version
+if( store.has('CheckUpdate') ){
+  store.set('CheckUpdate', true);
+}
+const apiUrl = `https://api.github.com/repos/strelka145/ChiyaNote/releases/latest`;
+axios.get(apiUrl)
+  .then(async response => {
+    const latestRelease = response.data;
+    if(app.getVersion()!=latestRelease.tag_name && !(store.get('CheckUpdate'))){
+      let response=await dialog.showMessageBox({
+        type:"info",
+        message:"A new version has been released. Would you like to update?",
+        buttons:["Yes","No"],
+        checkboxLabel:"Do not show this in the future."
+      });
+      console.log(response);
+      if(response.checkboxChecked){
+        store.set('CheckUpdate', false);
+      }
+      if(response.response==0){
+        shell.openExternal('https://github.com/strelka145/ChiyaNote/releases/latest');
+      }
+    }
+  }
+);
+
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
 const createWindow = () => {
