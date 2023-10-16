@@ -11,12 +11,15 @@ function createDirectoryIfNotExists(dirPath) {
 
 
 const sqlite3 = require('sqlite3').verbose();
-const { app, BrowserWindow, ipcMain , Menu, dialog} = require('electron');
+const { app, BrowserWindow, ipcMain , Menu, dialog, shell} = require('electron');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 const { time } = require('console');
 const { title } = require('process');
 const {resolve} = require('path');
+const Store = require('electron-store');
+const store = new Store();
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'database'));
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'data'));
 const db = new sqlite3.Database(path.join(app.getPath('appData'), 'database', 'database'));
@@ -290,6 +293,32 @@ function addData(data){
   const query = 'INSERT INTO noteDB (id, path, name, maintext, right, center, left) VALUES (?, ?, ?, ?, ?, ?, ?)';
   db.run(query, [data.id, data.path, data.name, data.maintext, data.right, data.center, data.left]);
 }
+
+//Check for the latest version
+if( store.has('CheckUpdate') ){
+  store.set('CheckUpdate', true);
+}
+const apiUrl = `https://api.github.com/repos/strelka145/ChiyaNote/releases/latest`;
+axios.get(apiUrl)
+  .then(async response => {
+    const latestRelease = response.data;
+    if(app.getVersion()!=latestRelease.tag_name && !(store.get('CheckUpdate'))){
+      let response=await dialog.showMessageBox({
+        type:"info",
+        message:"A new version has been released. Would you like to update?",
+        buttons:["Yes","No"],
+        checkboxLabel:"Do not show this in the future."
+      });
+      console.log(response);
+      if(response.checkboxChecked){
+        store.set('CheckUpdate', false);
+      }
+      if(response.response==0){
+        shell.openExternal('https://github.com/strelka145/ChiyaNote/releases/latest');
+      }
+    }
+  }
+);
 
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
