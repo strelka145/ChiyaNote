@@ -13,13 +13,12 @@ class Calc{
 
     render(){
         const div = document.createElement('div');
-        const center = document.createElement('center');
         const input = document.createElement('input');
         input.setAttribute("type","text");
         input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
         input.value=this.data || '';
         input.setAttribute("name",this.name);
-        center.appendChild(input);
+        div.appendChild(input);
         const p = document.createElement('p');
         p.setAttribute("style","font-family: serif; font-size: 20pt;");
         try {
@@ -33,7 +32,7 @@ class Calc{
             p.textContent = error.message;
         }
         p.setAttribute("name",this.name);
-        center.appendChild(p);
+        div.appendChild(p);
         p.addEventListener("dblclick", (event) =>  {
             const name=event.currentTarget.getAttribute("name");
             const input=document.querySelectorAll('input[name="'+name+'"]')[0];
@@ -53,7 +52,6 @@ class Calc{
             event.currentTarget.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
             p.setAttribute("style","font-family: serif; font-size: 20pt;");
         });
-        div.appendChild(center);
         return div;
     }
 
