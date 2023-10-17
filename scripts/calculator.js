@@ -6,6 +6,63 @@ class Calc{
         }
     } 
 
+    constructor({data}){
+        this.data = data.formula;
+        this.name=Math.random().toString(32).substring(2);
+    }
+
+    render(){
+        const div = document.createElement('div');
+        const center = document.createElement('center');
+        const input = document.createElement('input');
+        input.setAttribute("type","text");
+        input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
+        input.value=this.data || '';
+        input.setAttribute("name",this.name);
+        center.appendChild(input);
+        const p = document.createElement('p');
+        p.setAttribute("style","font-family: serif; font-size: 20pt;");
+        try {
+            if(this.data){
+                const result = this.#calculate(this.data);
+                p.textContent = this.data+"\n= "+result;
+            }else{
+                p.textContent = "";
+            }
+        } catch (error) {
+            p.textContent = error.message;
+        }
+        p.setAttribute("name",this.name);
+        center.appendChild(p);
+        p.addEventListener("dblclick", (event) =>  {
+            const name=event.currentTarget.getAttribute("name");
+            const input=document.querySelectorAll('input[name="'+name+'"]')[0];
+            input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%;");
+            event.currentTarget.setAttribute("style","font-family: 'serif'; font-size: 20pt; display:none");
+            input.focus();
+        });
+        input.addEventListener("blur", (event) =>  {
+            const name=event.currentTarget.getAttribute("name");
+            const p=document.querySelectorAll('p[name="'+name+'"]')[0];
+            try {
+                const result = this.#calculate(event.currentTarget.value);
+                p.textContent = event.currentTarget.value.replace('*','×')+"\n= "+result;
+            } catch (error) {
+                p.textContent = error.message;
+            }
+            event.currentTarget.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
+            p.setAttribute("style","font-family: serif; font-size: 20pt;");
+        });
+        div.appendChild(center);
+        return div;
+    }
+
+    save(data){
+        return {
+            formula: document.querySelectorAll('input[name="'+this.name+'"]')[0].value
+        }
+    }
+
     #isOperator(char){
         return ['+', '-', '*', '/'].includes(char);
     }
