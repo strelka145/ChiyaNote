@@ -46,7 +46,7 @@
     "@editorjs/quote": "^2.5.0",
     "@editorjs/simple-image": "^1.5.1",
     "editorjs-undo": "^2.0.23",
-    "electron": "^26.2.4",
+    "electron": "^27.0.0",
     "electron-builder": "^24.6.4"
   },
   "dependencies": {
