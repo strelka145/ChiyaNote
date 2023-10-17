@@ -70,7 +70,7 @@ class PCR{
 
     save(data){
         return {
-            temperature: data.querySelector('textarea').value
+            temperature: document.querySelectorAll('textarea[name="'+this.name+'"]')[0].value
         }
     }
 }
