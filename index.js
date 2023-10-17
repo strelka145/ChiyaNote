@@ -23,7 +23,7 @@ const store = new Store();
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'database'));
 createDirectoryIfNotExists(path.join(app.getPath('appData'), 'data'));
 const db = new sqlite3.Database(path.join(app.getPath('appData'), 'database', 'database'));
-
+let windows = [];
 const isMac = process.platform === 'darwin';
 const savePath=path.join(app.getPath('appData'), 'data');
 let currentContentID;
@@ -208,6 +208,17 @@ function openLicenseWindow(){
   licenseWindow.loadFile("Licenses/Licenses/license.txt");
 }
 
+function focusNextWindow() {
+  const focusedWindow = BrowserWindow.getFocusedWindow();
+  if (focusedWindow) {
+    const index = windows.indexOf(focusedWindow);
+    if (index !== -1 && index < windows.length) {
+      const nextWindow = windows[(index + 1)%windows.length];
+      nextWindow.focus();
+    }
+  }
+}
+
 async function openNoteWindow(id) {
   let title;
   let json_data;
@@ -248,6 +259,7 @@ async function openNoteWindow(id) {
       left:header.left,
      }
   });
+  windows.push(noteWindow);
 }
 
 function createTableIfNotExists() {
@@ -335,6 +347,7 @@ const createWindow = () => {
   });
   
   mainWindow.loadFile('index.html');
+  windows.push(mainWindow);
 };
 
 app.once('ready', () => {
