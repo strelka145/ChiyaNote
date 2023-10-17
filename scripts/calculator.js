@@ -1,4 +1,11 @@
 class Calc{
+    static get toolbox() {
+        return{
+            title: 'Calculator',
+            icon: calculator_icon,
+        }
+    } 
+
     #isOperator(char){
         return ['+', '-', '*', '/'].includes(char);
     }
