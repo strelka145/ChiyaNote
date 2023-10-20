@@ -458,8 +458,8 @@ ipcMain.on('outPDF', async(event, data)=>{
       printBackground:true,
       pageSize:"A4",
       displayHeaderFooter: true,
-      headerTemplate: '<div style="width:100%; text-align: left; font-size: 8pt; margin-left: 16px;  font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.left+'</div><div style="width:100%; text-align: center; font-size: 8pt; font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.center+'</div><div style="width:100%; text-align: right; font-size: 8pt; margin-right: 16px; font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.right+'</div>',
-      footerTemplate: '<div style="width:100%; text-align: center; font-size: 8pt; font-family: \'Times\', \'Times New Roman\', \'serif\';"><span class="pageNumber"></span>/<span class=totalPages ></span></div>',
+      headerTemplate: '<div style="width:100%; text-align: left; font-size: 20pt; margin-left: 16px;  font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.left+'</div><div style="width:100%; text-align: center; font-size: 20pt; font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.center+'</div><div style="width:100%; text-align: right; font-size: 20pt; margin-right: 16px; font-family: \'Times\', \'Times New Roman\', \'serif\';">'+db_data.right+'</div>',
+      footerTemplate: '<div style="width:100%; text-align: center; font-size: 20pt; font-family: \'Times\', \'Times New Roman\', \'serif\';"><span class="pageNumber"></span>/<span class=totalPages ></span></div>',
     }).then(data => {
       fs.writeFile(pdfPath, data, (error) => {
         if (error) throw error
