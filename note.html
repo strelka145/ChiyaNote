@@ -13,6 +13,7 @@
     <script src="library/code.js"></script>
     <script src="library/simple-image.js"></script>
     <script src="library/editorjs-undo.js"></script>
+    <script src="library/table.js"></script>
     <script src="scripts/calculator.js"></script>
     
     <script src="library/mousetrap/mousetrap.min.js"></script>
@@ -150,6 +151,12 @@
                     shortcut: 'CMD+SHIFT+L',
                 },
                 pcr: PCR,
+                table: {
+                    class: Table,
+                    config:{
+                        withHeadings:true
+                    }
+                },
                 spread_sheet: Jspreadsheet,
                 calculator:Calc,
                 image: SimpleImage,
