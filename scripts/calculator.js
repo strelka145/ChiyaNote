@@ -15,12 +15,17 @@ class Calc{
         const div = document.createElement('div');
         const input = document.createElement('input');
         input.setAttribute("type","text");
-        input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
         input.value=this.data || '';
         input.setAttribute("name",this.name);
         div.appendChild(input);
         const p = document.createElement('p');
-        p.setAttribute("style","font-family: serif; font-size: 20pt;");
+        if(this.data){
+            input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%; display: none;");
+            p.setAttribute("style","font-family: serif; font-size: 20pt;");
+        }else{
+            input.setAttribute("style","font-size: 20pt; font-family: serif; text-align: center; width: 100%;");
+            p.setAttribute("style","font-family: serif; font-size: 20pt; display: none;");
+        }
         try {
             if(this.data){
                 const result = this.#calculate(this.data);
