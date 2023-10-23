@@ -28,7 +28,7 @@ class Calc{
         }
         try {
             if(this.data){
-                const result = this.#calculate(this.data);
+                const result = this.#evaluateExpression(this.data);
                 p.textContent = this.data+"\n= "+result;
             }else{
                 p.textContent = "";
@@ -49,7 +49,7 @@ class Calc{
             const name=event.currentTarget.getAttribute("name");
             const p=document.querySelectorAll('p[name="'+name+'"]')[0];
             try {
-                const result = this.#calculate(event.currentTarget.value);
+                const result = this.#evaluateExpression(event.currentTarget.value);
                 p.textContent = event.currentTarget.value.replace('*','×')+"\n= "+result;
             } catch (error) {
                 p.textContent = error.message;
@@ -66,86 +66,91 @@ class Calc{
         }
     }
 
-    #isOperator(char){
-        return ['+', '-', '*', '/'].includes(char);
+    #tokenize(expr) {
+        const tokens = [];
+        let match;
+        const pattern = /\s*(=>|{|}|\(|\)|\^|[+\-*/]|\d+\.?\d*|\.\d+|\S)\s*/g;
+        while (match = pattern.exec(expr)) {
+            tokens.push(match[1]);
+        }
+        return tokens;
     }
 
-    #calculate(expression) {
-        const operators = [];
-        const values = [];
+    #parse(tokens) {
+        let i = 0;
     
-        for (let i = 0; i < expression.length; i++) {
-            const char = expression[i];
-    
-            if (char === ' ') {
-                continue;
-            } else if (char === '(') {
-                operators.push(char);
-            } else if (char === ')') {
-                while (operators.length > 0 && operators[operators.length - 1] !== '(') {
-                    const operator = operators.pop();
-                    const rightOperand = values.pop();
-                    const leftOperand = values.pop();
-                    values.push(this.#performOperation(leftOperand, rightOperand, operator));
+        function parsePrimaryExpr() {
+            let t = tokens[i++];
+            if (t === "(") {
+                const expr = parseExpression();
+                if (tokens[i++] !== ")") {
+                    throw new Error("Expected )");
                 }
-                operators.pop(); // Pop the opening parenthesis
-            } else if (this.#isOperator(char)) {
-                while (operators.length > 0 && this.#precedence(operators[operators.length - 1]) >= this.#precedence(char)) {
-                    const operator = operators.pop();
-                    const rightOperand = values.pop();
-                    const leftOperand = values.pop();
-                    values.push(this.#performOperation(leftOperand, rightOperand, operator));
-                }
-                operators.push(char);
-            } else {
-                let number = '';
-                while (i < expression.length && (/[0-9.]/).test(expression[i])) {
-                    number += expression[i];
-                    i++;
-                }
-                i--; // Move back one step
-                values.push(parseFloat(number));
+                return expr;
             }
+            if (!/^-?(\d+(\.\d*)?|\.\d+)$/.test(t)) {
+                throw new Error("Expected a number");
+            }
+            return { type: "number", value: parseFloat(t) };
         }
     
-        while (operators.length > 0) {
-            const operator = operators.pop();
-            const rightOperand = values.pop();
-            const leftOperand = values.pop();
-            values.push(this.#performOperation(leftOperand, rightOperand, operator));
+        function parseUnaryExpr() {
+            if (tokens[i] === "+" || tokens[i] === "-") {
+                return { type: tokens[i++], right: parseUnaryExpr() };
+            }
+            return parsePrimaryExpr();
         }
     
-        if (values.length === 1) {
-            return values[0];
-        } else {
-            throw new Error('Invalid expression');
+        function parseMultiplicativeExpr() {
+            let expr = parseUnaryExpr();
+            while (tokens[i] === "*" || tokens[i] === "/") {
+                expr = { type: tokens[i++], left: expr, right: parseUnaryExpr() };
+            }
+            return expr;
+        }
+    
+        function parseExponentialExpr() {
+            let expr = parseMultiplicativeExpr();
+            while (tokens[i] === "^") {
+                expr = { type: tokens[i++], left: expr, right: parseUnaryExpr() };
+            }
+            return expr;
+        }
+    
+        function parseAdditiveExpr() {
+            let expr = parseExponentialExpr();
+            while (tokens[i] === "+" || tokens[i] === "-") {
+                expr = { type: tokens[i++], left: expr, right: parseExponentialExpr() };
+            }
+            return expr;
+        }
+    
+        function parseExpression() {
+            return parseAdditiveExpr();
+        }
+    
+        const ast = parseExpression();
+        if (i !== tokens.length) {
+            throw new Error("Unexpected token: " + tokens[i]);
+        }
+        return ast;
+    }
+
+    #evaluateAst(node) {
+        switch (node.type) {
+            case "number": return node.value;
+            case "+": return this.#evaluateAst(node.left) + this.#evaluateAst(node.right);
+            case "-": return this.#evaluateAst(node.left) - this.#evaluateAst(node.right);
+            case "*": return this.#evaluateAst(node.left) * this.#evaluateAst(node.right);
+            case "/": return this.#evaluateAst(node.left) / this.#evaluateAst(node.right);
+            case "^": return Math.pow(this.#evaluateAst(node.left), this.#evaluateAst(node.right));
+            default: throw new Error("Unknown node type: " + node.type);
         }
     }
 
-    #precedence(operator) {
-        if (operator === '+' || operator === '-') {
-            return 1;
-        } else if (operator === '*' || operator === '/') {
-            return 2;
-        }
-        return 0;
-    }
-
-    #performOperation(leftOperand, rightOperand, operator) {
-        switch (operator) {
-            case '+':
-                return leftOperand + rightOperand;
-            case '-':
-                return leftOperand - rightOperand;
-            case '*':
-                return leftOperand * rightOperand;
-            case '/':
-                if (rightOperand === 0) {
-                    throw new Error('Cannot be divided by zero');
-                }
-                return leftOperand / rightOperand;
-            default:
-                throw new Error('Invalid operator');
-        }
+    #evaluateExpression(expr) {
+        const tokens = this.#tokenize(expr);
+        const ast = this.#parse(tokens);
+        return this.#evaluateAst(ast);
     }
 }
