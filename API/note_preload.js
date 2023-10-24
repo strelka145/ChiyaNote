@@ -9,4 +9,6 @@ contextBridge.exposeInMainWorld('noteAPI',{
     onSave: (callback) => ipcRenderer.on('save', callback),
     onPrint: (callback) => ipcRenderer.on('printPDF', callback),
     outPDF: (data) => ipcRenderer.send('outPDF',data),
+    openImageEditor: (data) => ipcRenderer.send('openImageEditor',data),
+    setImage: (data) => ipcRenderer.on('setImage', data),
 });

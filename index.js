@@ -485,3 +485,30 @@ ipcMain.on('renameTable', (event,data)=>{
     }
   });
 })
+
+ipcMain.on('openImageEditor', async(event,data) => {
+    const childWindow = new BrowserWindow({
+        parent: BrowserWindow.fromWebContents(event.sender),
+        modal: true,
+        title:title,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true,
+          preload: path.join(__dirname, 'API/ImageEditorAPI.js')
+        }
+    });
+    childWindow.loadFile("ImageEditor/ImageEditor.html",{
+      query:{
+        id:data.id
+       }
+    });
+});
+
+ipcMain.on('sendImage', async(event,data) => {
+  const targetWindow = BrowserWindow.fromWebContents(event.sender).getParentWindow();
+  targetWindow.webContents.send('setImage', {
+    id:data.id,
+    data:data.data
+  });
+  BrowserWindow.fromWebContents(event.sender).close();
+});
