@@ -216,3 +216,10 @@ window.noteAPI.onPrint((_event, value) => {
         }
     }
 });
+
+window.noteAPI.setImage((_event, value) => {
+    let element = document.getElementById(value.id);
+    let img = element.querySelector('img');
+    console.log(value.data);
+    img.setAttribute("src",value.data);
+})
