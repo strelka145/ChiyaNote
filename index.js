@@ -367,10 +367,10 @@ ipcMain.handle('search', (event, data) => {
       const searchQuery = data;
       let query,searchArray;
       if (data==""){
-        query = `SELECT * FROM noteDB`;
+        query = `SELECT * FROM noteDB ORDER BY id DESC`;
         searchArray=[];
       }else{
-        query = `SELECT * FROM noteDB WHERE noteDB MATCH ?`;
+        query = `SELECT * FROM noteDB WHERE noteDB MATCH ?  ORDER BY id DESC`;
         searchArray=[searchQuery];
       }
       db.all(query, searchArray, (err, rows) => {
