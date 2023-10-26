@@ -71,6 +71,35 @@ document.getElementById('btnSave').addEventListener('click', function() {
     });
 });
 
+//Cancels the dragover event and enables the drop event.
+canvas.wrapperEl.addEventListener('dragover', function(e) {
+    e.preventDefault();
+});
+
+//Processes files dropped by the drop event.
+canvas.wrapperEl.addEventListener('drop', function(e) {
+    e.preventDefault();
+
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+        var file = files[0];
+        if (file.type.includes('image')) {
+            var reader = new FileReader();
+            reader.onload = function(f) {
+                var img = new Image();
+                img.src = f.target.result;
+
+                img.onload = function() {
+                    var image = new fabric.Image(img);
+                    canvas.add(image);
+                    canvas.renderAll();
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});
+
 const btnAddText =document.getElementById('btnAddText');
 btnAddText.innerHTML = imageEditor_text_icon + btnAddText.innerHTML;
 
