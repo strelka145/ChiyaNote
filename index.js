@@ -175,6 +175,12 @@ const contex_menu = Menu.buildFromTemplate([
     }
   },
   {
+    label: 'Duplicate',
+    click:async(menuItem, browserWindow)=>{
+      copyItem(currentContentID);
+    }
+  },
+  {
     label: 'Delete',
     click:async(menuItem, browserWindow)=>{
       const result=dialog.showMessageBoxSync(browserWindow,{
@@ -189,6 +195,26 @@ const contex_menu = Menu.buildFromTemplate([
   },
 ]);
 
+async function copyItem(id){
+  const db_data=await getDataFromID(id);
+  const latestID=await getLatestID();
+  addData({
+    id:Number(latestID)+1,
+    path:savePath+String(Number(latestID)+1)+".chn",
+    name:db_data.name+"_copy",
+    maintext:db_data.maintext,
+    right:db_data.right,
+    center:db_data.center,
+    left:db_data.left,
+  });
+  fs.copyFile(path.join(savePath,String(db_data.id)+".chn"), path.join(savePath,String(Number(latestID)+1)+".chn"), err => {
+    if (err) {
+      console.log(err.message);
+  
+      throw err;
+    }
+  });
+}
 
 function deleteItem(id){
   const query = 'DELETE FROM noteDB WHERE id = ?';
