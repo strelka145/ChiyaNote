@@ -20,12 +20,12 @@ const { title } = require('process');
 const {resolve} = require('path');
 const Store = require('electron-store');
 const store = new Store();
-createDirectoryIfNotExists(path.join(app.getPath('appData'), 'database'));
-createDirectoryIfNotExists(path.join(app.getPath('appData'), 'data'));
-const db = new sqlite3.Database(path.join(app.getPath('appData'), 'database', 'database'));
+createDirectoryIfNotExists(path.join(app.getPath('userData'), 'database'));
+createDirectoryIfNotExists(path.join(app.getPath('userData'), 'data'));
+const db = new sqlite3.Database(path.join(app.getPath('userData'), 'database', 'database'));
 let windows = [];
 const isMac = process.platform === 'darwin';
-const savePath=path.join(app.getPath('appData'), 'data');
+const savePath=path.join(app.getPath('userData'), 'data/');
 let currentContentID;
 const template = [
   // { role: 'appMenu' }
@@ -239,7 +239,7 @@ async function openNoteWindow(id) {
       center:db_data.center,
       left:db_data.left,
     }
-    json_data=fs.readFileSync(savePath+String(id)+".chn", 'utf8');
+    json_data=fs.readFileSync(path.join(savePath,String(id)+".chn"), 'utf8');
   }
   const noteWindow = new BrowserWindow({
     title:title,
@@ -401,14 +401,14 @@ ipcMain.handle('getLatestID',(event) =>{
 ipcMain.handle('newSave', async(event,data)=>{
   let id;
   id=await getLatestID();
-  fs.writeFile(savePath+String(id+1)+".chn", data.data, (err) => {
+  fs.writeFile(path.join(savePath,String(id+1)+".chn"), data.data, (err) => {
     if (err) {
       console.error('file write error:', err);
     }
   });
   const db_data={
     id:id+1,
-    path:savePath+String(id+1)+".chn",
+    path:path.join(savePath,String(id+1)+".chn"),
     name:data.name,
     maintext:data.maintext,
     left:data.left,
@@ -428,7 +428,7 @@ ipcMain.on('openNote', (event, id) =>{
 });
 
 ipcMain.on('updateTable', (event, data)=>{
-  fs.writeFile(savePath+String(data.id)+".chn", data.data, (err) => {
+  fs.writeFile(path.join(savePath,String(data.id)+".chn"), data.data, (err) => {
     if (err) {
       console.error('file write error:', err);
     }
