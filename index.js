@@ -214,6 +214,7 @@ async function copyItem(id){
       throw err;
     }
   });
+  windows[0].reload();
 }
 
 function deleteItem(id){
@@ -224,6 +225,7 @@ function deleteItem(id){
       return;
     }
   });
+  windows[0].reload();
 }
 
 function openLicenseWindow(){
@@ -510,6 +512,7 @@ ipcMain.on('renameTable', (event,data)=>{
       return;
     }
   });
+  BrowserWindow.fromWebContents(event.sender).reload();
 })
 
 ipcMain.on('openImageEditor', async(event,data) => {

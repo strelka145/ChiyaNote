@@ -47,12 +47,14 @@
     "@editorjs/simple-image": "^1.5.1",
     "@editorjs/table": "^2.2.2",
     "editorjs-undo": "^2.0.23",
-    "electron": "^27.0.0",
+    "electron": "^27.0.2",
     "electron-builder": "^24.6.4"
   },
   "dependencies": {
     "axios": "^1.5.1",
     "electron-store": "^8.1.0",
-    "sqlite3": "^5.1.6"
+    "node-pty": "^1.0.0",
+    "sqlite3": "^5.1.6",
+    "xterm": "^5.3.0"
   }
 }

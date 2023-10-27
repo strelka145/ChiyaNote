@@ -1,0 +1,86 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #2c3e50;
+}
+  
+.tabs {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #34495e;
+}
+  
+.tab-header {
+    display: flex;
+    padding-left: 20px;
+}
+  
+.tab-button {
+    margin-right: 5px;
+    padding: 15px 25px;
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #7f8c8d;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    font-weight: bold;
+    text-align: center;
+    color: #ecf0f1;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+}
+  
+.tab-button:hover {
+    background-color: #95a5a6;
+    box-shadow: 0px 3px 8px rgba(0,0,0,0.3);
+}
+  
+.tab-button.active {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    box-shadow: none;
+}
+  
+.tab-content {
+    flex-grow: 1;
+    border-top: 5px solid #ecf0f1; /* アクティブなタブの色と同じ色に変更 */
+    padding: 20px;
+    background-color: #ecf0f1;
+    overflow-y: auto;
+}
+  
+.tab-pane {
+    height: 100%;
+    display: none;
+}
+  
+.tab-pane.active {
+    display: block;
+}
+.serch_input {
+    width: 80%;
+    border: 2px solid #999999;
+    border-radius: 16px;
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+}
+.serch_input:focus {
+    border: 2px solid black;
+}
+h1{
+    margin: 32px 32px 8px 32px;
+    font-family: serif;
+    color: #222222;
+}
+p{
+    margin: 0px 40px 0px 52px;
+    font-family: serif;
+    color: #222222;
+}
+div[name="content"]{
+    cursor: pointer;
+}
