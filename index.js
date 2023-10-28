@@ -559,6 +559,9 @@ ipcMain.handle('getConfigs', (event) => {
 
 ipcMain.on('setConfigs', (event,data) => {
   store.set('configs', data);
+  dialog.showMessageBox(BrowserWindow.fromWebContents(event.sender),{
+    message:"Changes have been applied."
+  });
   createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'database'));
   createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'data'));
   createTableIfNotExists();
