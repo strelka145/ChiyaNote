@@ -142,6 +142,7 @@
         document.getElementById("leftHead").value=urlParams.get('left');
         document.getElementById("centerHead").value=urlParams.get('center');
         document.getElementById("rightHead").value=urlParams.get('right');
+        let editor;
         const menuObj=  {
                 header: {
                     class: Header,
@@ -217,7 +218,7 @@
                     },
                 };
 
-                const editor = new EditorJS({
+                editor = new EditorJS({
                     holder: 'editor',
                     onReady: () => {
                         new Undo({ editor });

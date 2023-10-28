@@ -559,6 +559,8 @@ ipcMain.handle('getConfigs', (event) => {
 
 ipcMain.on('setConfigs', (event,data) => {
   store.set('configs', data);
+  createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'database'));
+  createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'data'));
   createTableIfNotExists();
 });
 
@@ -566,5 +568,5 @@ ipcMain.handle('selctDir', async(event) => {
   const path=await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender),{
     properties: ['openFile', 'openDirectory']
   });
-  return path.filePath;
+  return path.filePaths[0];
 });
