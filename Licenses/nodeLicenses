@@ -79,7 +79,7 @@ SOFTWARE.
 
 -----
 
-The following software may be included in this product: @editorjs/code, @editorjs/header, @editorjs/quote, @editorjs/simple-image. A copy of the source code may be downloaded from https://github.com/editor-js/code (@editorjs/code), https://github.com/editor-js/header (@editorjs/header), https://github.com/editor-js/quote (@editorjs/quote), https://github.com/editor-js/simple-image (@editorjs/simple-image). This software contains the following license and notice below:
+The following software may be included in this product: @editorjs/code, @editorjs/header, @editorjs/quote. A copy of the source code may be downloaded from https://github.com/editor-js/code (@editorjs/code), https://github.com/editor-js/header (@editorjs/header), https://github.com/editor-js/quote (@editorjs/quote). This software contains the following license and notice below:
 
 MIT License
 
@@ -300,7 +300,7 @@ Apache License
 
 -----
 
-The following software may be included in this product: @editorjs/nested-list. A copy of the source code may be downloaded from https://github.com/editor-js/nested-list.git. This software contains the following license and notice below:
+The following software may be included in this product: @editorjs/nested-list, @editorjs/table. A copy of the source code may be downloaded from https://github.com/editor-js/nested-list.git (@editorjs/nested-list), https://github.com/editor-js/table (@editorjs/table). This software contains the following license and notice below:
 
 MIT License
 
@@ -3184,6 +3184,32 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+-----
+
+The following software may be included in this product: hasown. A copy of the source code may be downloaded from git+https://github.com/inspect-js/hasOwn.git. This software contains the following license and notice below:
+
+MIT License
+
+Copyright (c) Jordan Harband and contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 -----
 
