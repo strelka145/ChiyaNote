@@ -544,7 +544,6 @@ ipcMain.on('sendImage', async(event,data) => {
 });
 
 ipcMain.handle('getConfigs', (event) => {
-  console.log(store.has('configs'));
   if(!(store.has('configs')) ){
     store.set('configs', {
       label:editorMenuItems,
@@ -558,6 +557,5 @@ ipcMain.handle('getConfigs', (event) => {
 });
 
 ipcMain.on('setConfigs', (event,data) => {
-  console.log(data);
   store.set('configs', data);
 });

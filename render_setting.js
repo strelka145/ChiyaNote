@@ -102,7 +102,6 @@ function getInputValuesFromTable(tableElement) {
 }
 
 function setSettings(){
-    console.log(getLiNumbers("menu_list"));
     window.api.setConfigs({
         label:configs.label,
         order:getLiNumbers("menu_list"),
@@ -115,7 +114,6 @@ function setSettings(){
 window.onload = async function() {
     configs = await window.api.getConfigs();
     addEventListenner2list();
-    console.log(configs);
     generateListItems(configs.label, configs.order, document.getElementById("menu_list"));
     generateTableRows(configs.label, configs.order, configs.shortcut, document.getElementById("menu_table"));
     document.getElementById("saveD").value=configs.saveDirectory;
