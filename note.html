@@ -125,6 +125,16 @@
     <div id="editor"></div>
     <script src="scripts/note_render.js"></script>
     <script>
+        function reorderObjectByArray(obj, orderArray) {
+            const keys = Object.keys(obj);
+            const reorderedObject = {};
+            orderArray.forEach(index => {
+                if (keys[index]) {
+                    reorderedObject[keys[index]] = obj[keys[index]];
+                }
+            });
+            return reorderedObject;
+        }
         const urlParams = new URLSearchParams(window.location.search);
         const dataValue = urlParams.get('data');
         let id = Number(urlParams.get('id'));
@@ -132,13 +142,7 @@
         document.getElementById("leftHead").value=urlParams.get('left');
         document.getElementById("centerHead").value=urlParams.get('center');
         document.getElementById("rightHead").value=urlParams.get('right');
-        const editor = new EditorJS({
-            holder: 'editor',
-            onReady: () => {
-                new Undo({ editor });
-            },
-            
-            tools: {
+        const menuObj=  {
                 header: {
                     class: Header,
                     shortcut: 'CMD+SHIFT+H',
@@ -162,9 +166,67 @@
                 checklist: Checklist,
                 quote: Quote,
                 code: CodeTool,
-            },
-            data:JSON.parse(dataValue)
-        });
+            };
+
+            window.onload = async function() {
+                const configs = await window.noteAPI.getConfigs();
+                const menuObj=  {
+                    header: {
+                        class: Header,
+                        shortcut: configs.shortcut[0] === "" ? undefined : configs.shortcut[0],
+                    },
+                    list: {
+                        class: NestedList,
+                        inlineToolbar: true,
+                        config: {
+                            defaultStyle: 'unordered'
+                        },
+                        shortcut: configs.shortcut[1] === "" ? undefined : configs.shortcut[1],
+                    },
+                    pcr: {
+                        class: PCR,
+                        shortcut: configs.shortcut[2] === "" ? undefined : configs.shortcut[2],
+                    },
+                    table: {
+                        class: Table,
+                        shortcut: configs.shortcut[3] === "" ? undefined : configs.shortcut[3],
+                    },
+                    spread_sheet: {
+                        class: Jspreadsheet,
+                        shortcut: configs.shortcut[4] === "" ? undefined : configs.shortcut[4],
+                    },
+                    calculator:{
+                        class: Calc,
+                        shortcut: configs.shortcut[5] === "" ? undefined : configs.shortcut[5],
+                    },
+                    image: {
+                        class: ImageEditor,
+                        shortcut: configs.shortcut[6] === "" ? undefined : configs.shortcut[6],
+                    },
+                    checklist: {
+                        class: Checklist,
+                        shortcut: configs.shortcut[7] === "" ? undefined : configs.shortcut[7],
+                    },
+                    quote: {
+                        class: Quote,
+                        shortcut: configs.shortcut[8] === "" ? undefined : configs.shortcut[8],
+                    },
+                    code: {
+                        class: CodeTool,
+                        shortcut: configs.shortcut[9] === "" ? undefined : configs.shortcut[9],
+                    },
+                };
+
+                const editor = new EditorJS({
+                    holder: 'editor',
+                    onReady: () => {
+                        new Undo({ editor });
+                    },
+                    tools:reorderObjectByArray(menuObj,configs.order),
+                    data:JSON.parse(dataValue)
+                });
+            }
+        
     </script>
 </body>
 

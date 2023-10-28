@@ -11,4 +11,5 @@ contextBridge.exposeInMainWorld('noteAPI',{
     outPDF: (data) => ipcRenderer.send('outPDF',data),
     openImageEditor: (data) => ipcRenderer.send('openImageEditor',data),
     setImage: (data) => ipcRenderer.on('setImage', data),
+    getConfigs: async () => await ipcRenderer.invoke('getConfigs'),
 });
