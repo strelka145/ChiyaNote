@@ -3,14 +3,15 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="setting.css">
         <script src="render.js"></script>
+        <script src="render_setting.js"></script>
     </head>
     <body>
         <div class="tabs">
             <div class="tab-header">
               <button class="tab-button active" onclick="changeTab(0)">Search</button>
-              <button class="tab-button" onclick="changeTab(1)">タブ2</button>
-              <button class="tab-button" onclick="changeTab(2)">Setting</button>
+              <button class="tab-button" onclick="changeTab(1)">Setting</button>
             </div>
             <div class="tab-content">
               <div class="tab-pane active">
@@ -20,8 +21,42 @@
                 <div id="contents">
                   </div>
               </div>
-              <div class="tab-pane"></div>
-              <div class="tab-pane">コンテンツ3</div>
+              <div class="tab-pane setting">
+                <div class="settings-container">
+                    <div class="apply-settings">
+                        <button id="apply-button">Apply</button>
+                    </div>
+                    <section class="settings-section" id="editor-settings">
+                        <h2>Editor</h2>
+                        <div class="setting-item">
+                            <label>Order of the menu</label>
+                            <p class="description">You can set the order of the menu displayed in the editor window. Please move them using drag & drop.</p>
+                            <ul class="drag-list" id="menu_list"></ul>
+                        </div>
+                        <div class="setting-item">
+                            <label>Shortcut key</label>
+                            <p class="description">Please enter shortcut keys in the format like "Shift+Ctrl+A" or "Shift+Cmd+B".</p>
+                            <table id="menu_table" class="stylish-table"></table>
+                        </div>
+                    </section>
+                    <section class="settings-section" id="directory-settings">
+                        <h2>Directory</h2>
+                        <div class="setting-item">
+                            <label>Save destination directory</label>
+                            <input type="text" placeholder="Save destination directory">
+                            <button class="selectDialog">Select</button>
+                        </div>
+                    </section>
+                    <section class="settings-section" id="sqlite-settings">
+                        <h2>SQLite</h2>
+                        <div class="setting-item">
+                            <label>Table name</label>
+                            <input type="text">
+                            <p class="description">Even if you change to a new table name, the previous data is saved under the old table name. If you wish to transfer the previous data as well, please use sqlite to move the data.</p>
+                        </div>
+                    </section>
+                </div>
+              </div>
             </div>
         </div>          
         <script>
