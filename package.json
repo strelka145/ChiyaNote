@@ -13,10 +13,15 @@
       "library/mousetrap/*",
       "Licenses/*",
       "Licenses/Licenses/*",
+      "ImageEditor/*",
       "scripts/*",
       "index.html",
       "index.js",
-      "note.html"
+      "note.html",
+      "index.css",
+      "render_setting.js",
+      "render.js",
+      "setting.css"
     ],
     "mac": {
       "target": "dmg",
