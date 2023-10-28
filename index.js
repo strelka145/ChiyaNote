@@ -20,8 +20,8 @@ const { title } = require('process');
 const {resolve} = require('path');
 const Store = require('electron-store');
 const store = new Store();
-const editorMenuItems=["Text","Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
-if(!(store.has('configs')) ){
+const editorMenuItems=["Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
+if(!(store.has('configs'))){
   store.set('configs', {
     label:editorMenuItems,
     order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
@@ -229,7 +229,7 @@ async function copyItem(id){
 }
 
 function deleteItem(id){
-  const query = 'DELETE FROM ${store.get("configs").tableName} WHERE id = ?';
+  const query = `DELETE FROM ${store.get("configs").tableName} WHERE id = ?`;
   db.get(query, [id], (err, row) => {
     if (err) {
       console.error(err.message);
@@ -315,7 +315,7 @@ function createTableIfNotExists() {
 
 async function getDataFromID(id){
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM ${store.get("configs").tableName} WHERE id = ?';
+    const query = `SELECT * FROM ${store.get("configs").tableName} WHERE id = ?`;
     db.get(query, [id], (err, row) => {
       if (err){
         reject(err);
@@ -328,7 +328,7 @@ async function getDataFromID(id){
 
 async function getLatestID(){
   return new Promise((resolve, reject) => {
-    const query = 'SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}';
+    const query = `SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}`;
     db.get(query, (err, row) => {
       if (err) {
         console.error(err.message);
@@ -341,7 +341,7 @@ async function getLatestID(){
 }
 
 function addData(data){
-  const query = 'INSERT INTO ${store.get("configs").tableName} (id, path, name, maintext, right, center, left) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const query = `INSERT INTO ${store.get("configs").tableName} (id, path, name, maintext, right, center, left) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   db.run(query, [data.id, data.path, data.name, data.maintext, data.right, data.center, data.left]);
 }
 
@@ -425,7 +425,7 @@ ipcMain.handle('search', (event, data) => {
 
 ipcMain.handle('getLatestID',(event) =>{
   return new Promise((resolve, reject) => {
-    const query = 'SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}';
+    const query = `SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}`;
     db.get(query, (err, row) => {
       if (err) {
         console.error(err.message);
@@ -472,7 +472,7 @@ ipcMain.on('updateTable', (event, data)=>{
       console.error('file write error:', err);
     }
   });
-  const query = 'UPDATE ${store.get("configs").tableName} SET maintext = ?, right = ?, center = ?, left = ? WHERE id = ?';
+  const query = `UPDATE ${store.get("configs").tableName} SET maintext = ?, right = ?, center = ?, left = ? WHERE id = ?`;
   db.run(query, [data.maintext, data.right, data.center, data.left, Number(data.id)], function(err) {
     if (err) {
       console.error(err.message);
@@ -516,7 +516,7 @@ ipcMain.on('show-context-menu', async(event,id) => {
 });
 
 ipcMain.on('renameTable', (event,data)=>{
-  const query = 'UPDATE ${store.get("configs").tableName} SET name = ? WHERE id = ?';
+  const query = `UPDATE ${store.get("configs").tableName} SET name = ? WHERE id = ?`;
   db.run(query, [data.name, Number(data.id)], function(err) {
     if (err) {
       console.error(err.message);
