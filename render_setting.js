@@ -49,6 +49,7 @@ function getLiNumbers(ulId) {
   
     return numbers;
 }
+
 function generateListItems(elements, order, parentElement) {
     parentElement.innerHTML = "";
 
@@ -64,7 +65,7 @@ function generateListItems(elements, order, parentElement) {
   
 function generateTableRows(labels, order, inputValues, parentElement) {
     parentElement.innerHTML = "";
-    
+
     for(let i = 0; i < order.length; i++) {
         let tr = document.createElement("tr");
   
@@ -85,13 +86,40 @@ function generateTableRows(labels, order, inputValues, parentElement) {
       }
 }
 
-window.onload = function() {
+function getInputValuesFromTable(tableElement) {
+    const inputs = tableElement.querySelectorAll(".text-input");
+    let valuesArray = [];
+
+    Array.from(inputs).sort((a, b) => {
+        const aNum = parseInt(a.id.replace("input", ""), 10);
+        const bNum = parseInt(b.id.replace("input", ""), 10);
+        return aNum - bNum;
+    }).forEach(input => {
+        valuesArray.push(input.value);
+    });
+
+    return valuesArray;
+}
+
+function setSettings(){
+    console.log(getLiNumbers("menu_list"));
+    window.api.setConfigs({
+        label:configs.label,
+        order:getLiNumbers("menu_list"),
+        shortcut:getInputValuesFromTable(document.getElementById("menu_table")),
+        saveDirectory:document.getElementById("saveD").value,
+        tableName:document.getElementById("TableName").value,
+    });
+}
+
+window.onload = async function() {
+    configs = await window.api.getConfigs();
     addEventListenner2list();
-    let labels = ["Text","Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
-    let order = [0,1,2,3,4,5,6,7,8,9,10];
-    let inputValues = ["","","","","","","","","","",""];
-    generateListItems(labels, order, document.getElementById("menu_list"));
-    generateTableRows(labels, order, inputValues, document.getElementById("menu_table"));
- }
-  
-  
+    console.log(configs);
+    generateListItems(configs.label, configs.order, document.getElementById("menu_list"));
+    generateTableRows(configs.label, configs.order, configs.shortcut, document.getElementById("menu_table"));
+    document.getElementById("saveD").value=configs.saveDirectory;
+    document.getElementById("TableName").value=configs.tableName;
+}
+
+let configs;

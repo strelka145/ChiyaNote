@@ -6,4 +6,7 @@ contextBridge.exposeInMainWorld('api',{
     showContextMenu: async(id) => await ipcRenderer.send('show-context-menu',id),
     rename: (callback) => ipcRenderer.on('rename', callback),
     renameTable: (data) => ipcRenderer.send('renameTable', data),
+    getConfigs: async () => await ipcRenderer.invoke('getConfigs'),
+    setConfigs: (data) => ipcRenderer.send('setConfigs', data),
 });
+

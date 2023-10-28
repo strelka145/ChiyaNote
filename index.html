@@ -24,7 +24,7 @@
               <div class="tab-pane setting">
                 <div class="settings-container">
                     <div class="apply-settings">
-                        <button id="apply-button">Apply</button>
+                        <button id="apply-button" onclick="setSettings()">Apply</button>
                     </div>
                     <section class="settings-section" id="editor-settings">
                         <h2>Editor</h2>
@@ -43,7 +43,7 @@
                         <h2>Directory</h2>
                         <div class="setting-item">
                             <label>Save destination directory</label>
-                            <input type="text" placeholder="Save destination directory">
+                            <input type="text" id="saveD" placeholder="Save destination directory">
                             <button class="selectDialog">Select</button>
                         </div>
                     </section>
@@ -51,7 +51,7 @@
                         <h2>SQLite</h2>
                         <div class="setting-item">
                             <label>Table name</label>
-                            <input type="text">
+                            <input type="text" id="TableName">
                             <p class="description">Even if you change to a new table name, the previous data is saved under the old table name. If you wish to transfer the previous data as well, please use sqlite to move the data.</p>
                         </div>
                     </section>

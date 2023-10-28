@@ -27,6 +27,7 @@ let windows = [];
 const isMac = process.platform === 'darwin';
 const savePath=path.join(app.getPath('userData'), 'data/');
 let currentContentID;
+const editorMenuItems=["Text","Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
 const template = [
   // { role: 'appMenu' }
   ...(isMac
@@ -540,4 +541,23 @@ ipcMain.on('sendImage', async(event,data) => {
     data:data.data
   });
   BrowserWindow.fromWebContents(event.sender).close();
+});
+
+ipcMain.handle('getConfigs', (event) => {
+  console.log(store.has('configs'));
+  if(!(store.has('configs')) ){
+    store.set('configs', {
+      label:editorMenuItems,
+      order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
+      shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
+      saveDirectory:app.getPath('userData'),
+      tableName:"noteDB"
+    });
+  }
+  return store.get('configs');
+});
+
+ipcMain.on('setConfigs', (event,data) => {
+  console.log(data);
+  store.set('configs', data);
 });
