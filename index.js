@@ -20,14 +20,24 @@ const { title } = require('process');
 const {resolve} = require('path');
 const Store = require('electron-store');
 const store = new Store();
-createDirectoryIfNotExists(path.join(app.getPath('userData'), 'database'));
-createDirectoryIfNotExists(path.join(app.getPath('userData'), 'data'));
-const db = new sqlite3.Database(path.join(app.getPath('userData'), 'database', 'database'));
+const editorMenuItems=["Text","Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
+if(!(store.has('configs')) ){
+  store.set('configs', {
+    label:editorMenuItems,
+    order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
+    shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
+    saveDirectory:app.getPath('userData'),
+    tableName:"noteDB"
+  });
+}
+createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'database'));
+createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'data'));
+const db = new sqlite3.Database(path.join(store.get('configs').saveDirectory, 'database', 'database'));
 let windows = [];
 const isMac = process.platform === 'darwin';
-const savePath=path.join(app.getPath('userData'), 'data/');
+const savePath=path.join(store.get('configs').saveDirectory, 'data/');
 let currentContentID;
-const editorMenuItems=["Text","Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
+
 const template = [
   // { role: 'appMenu' }
   ...(isMac
@@ -219,7 +229,7 @@ async function copyItem(id){
 }
 
 function deleteItem(id){
-  const query = 'DELETE FROM noteDB WHERE id = ?';
+  const query = 'DELETE FROM ${store.get("configs").tableName} WHERE id = ?';
   db.get(query, [id], (err, row) => {
     if (err) {
       console.error(err.message);
@@ -294,7 +304,7 @@ async function openNoteWindow(id) {
 function createTableIfNotExists() {
     db.serialize(() => {
       db.run(`
-        CREATE VIRTUAL TABLE IF NOT EXISTS noteDB USING fts5(id, path, name, maintext, right, center, left, tokenize='trigram');
+        CREATE VIRTUAL TABLE IF NOT EXISTS ${store.get("configs").tableName} USING fts5(id, path, name, maintext, right, center, left, tokenize='trigram');
       `, (err) => {
         if (err) {
           console.error('An error occurred while creating the table:', err.message);
@@ -305,7 +315,7 @@ function createTableIfNotExists() {
 
 async function getDataFromID(id){
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM noteDB WHERE id = ?';
+    const query = 'SELECT * FROM ${store.get("configs").tableName} WHERE id = ?';
     db.get(query, [id], (err, row) => {
       if (err){
         reject(err);
@@ -318,7 +328,7 @@ async function getDataFromID(id){
 
 async function getLatestID(){
   return new Promise((resolve, reject) => {
-    const query = 'SELECT MAX(id) AS max_id FROM noteDB';
+    const query = 'SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}';
     db.get(query, (err, row) => {
       if (err) {
         console.error(err.message);
@@ -331,7 +341,7 @@ async function getLatestID(){
 }
 
 function addData(data){
-  const query = 'INSERT INTO noteDB (id, path, name, maintext, right, center, left) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO ${store.get("configs").tableName} (id, path, name, maintext, right, center, left) VALUES (?, ?, ?, ?, ?, ?, ?)';
   db.run(query, [data.id, data.path, data.name, data.maintext, data.right, data.center, data.left]);
 }
 
@@ -396,10 +406,10 @@ ipcMain.handle('search', (event, data) => {
       const searchQuery = data;
       let query,searchArray;
       if (data==""){
-        query = `SELECT * FROM noteDB ORDER BY id DESC`;
+        query = `SELECT * FROM ${store.get("configs").tableName} ORDER BY id DESC`;
         searchArray=[];
       }else{
-        query = `SELECT * FROM noteDB WHERE noteDB MATCH ?  ORDER BY id DESC`;
+        query = `SELECT * FROM ${store.get("configs").tableName} WHERE ${store.get("configs").tableName} MATCH ?  ORDER BY id DESC`;
         searchArray=[searchQuery];
       }
       db.all(query, searchArray, (err, rows) => {
@@ -415,7 +425,7 @@ ipcMain.handle('search', (event, data) => {
 
 ipcMain.handle('getLatestID',(event) =>{
   return new Promise((resolve, reject) => {
-    const query = 'SELECT MAX(id) AS max_id FROM noteDB';
+    const query = 'SELECT MAX(id) AS max_id FROM ${store.get("configs").tableName}';
     db.get(query, (err, row) => {
       if (err) {
         console.error(err.message);
@@ -462,7 +472,7 @@ ipcMain.on('updateTable', (event, data)=>{
       console.error('file write error:', err);
     }
   });
-  const query = 'UPDATE noteDB SET maintext = ?, right = ?, center = ?, left = ? WHERE id = ?';
+  const query = 'UPDATE ${store.get("configs").tableName} SET maintext = ?, right = ?, center = ?, left = ? WHERE id = ?';
   db.run(query, [data.maintext, data.right, data.center, data.left, Number(data.id)], function(err) {
     if (err) {
       console.error(err.message);
@@ -506,7 +516,7 @@ ipcMain.on('show-context-menu', async(event,id) => {
 });
 
 ipcMain.on('renameTable', (event,data)=>{
-  const query = 'UPDATE noteDB SET name = ? WHERE id = ?';
+  const query = 'UPDATE ${store.get("configs").tableName} SET name = ? WHERE id = ?';
   db.run(query, [data.name, Number(data.id)], function(err) {
     if (err) {
       console.error(err.message);
@@ -544,18 +554,17 @@ ipcMain.on('sendImage', async(event,data) => {
 });
 
 ipcMain.handle('getConfigs', (event) => {
-  if(!(store.has('configs')) ){
-    store.set('configs', {
-      label:editorMenuItems,
-      order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
-      shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
-      saveDirectory:app.getPath('userData'),
-      tableName:"noteDB"
-    });
-  }
   return store.get('configs');
 });
 
 ipcMain.on('setConfigs', (event,data) => {
   store.set('configs', data);
+  createTableIfNotExists();
+});
+
+ipcMain.handle('selctDir', async(event) => {
+  const path=await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender),{
+    properties: ['openFile', 'openDirectory']
+  });
+  return path.filePath;
 });

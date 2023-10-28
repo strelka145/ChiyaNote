@@ -44,14 +44,14 @@
                         <div class="setting-item">
                             <label>Save destination directory</label>
                             <input type="text" id="saveD" placeholder="Save destination directory">
-                            <button class="selectDialog">Select</button>
+                            <button class="selectDialog" onclick="selectDir()">Select</button>
                         </div>
                     </section>
                     <section class="settings-section" id="sqlite-settings">
                         <h2>SQLite</h2>
                         <div class="setting-item">
-                            <label>Table name</label>
-                            <input type="text" id="TableName">
+                            <label>Table name (Alphabets only)</label>
+                            <input type="text" id="TableName" oninput="validateAlphabetOnly(this)">
                             <p class="description">Even if you change to a new table name, the previous data is saved under the old table name. If you wish to transfer the previous data as well, please use sqlite to move the data.</p>
                         </div>
                     </section>

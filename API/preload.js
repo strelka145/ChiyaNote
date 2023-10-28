@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld('api',{
     renameTable: (data) => ipcRenderer.send('renameTable', data),
     getConfigs: async () => await ipcRenderer.invoke('getConfigs'),
     setConfigs: (data) => ipcRenderer.send('setConfigs', data),
+    selctDir: async () => await ipcRenderer.invoke('selctDir'),
 });
 

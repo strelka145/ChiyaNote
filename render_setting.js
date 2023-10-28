@@ -111,6 +111,18 @@ function setSettings(){
     });
 }
 
+async function selectDir(){
+    const save_path = await window.api.selctDir();
+    if(save_path!=""){
+        document.getElementById("saveD").value=save_path;
+    }
+}
+
+function validateAlphabetOnly(inputElement) {
+    // Replace any non-alphabet characters
+    inputElement.value = inputElement.value.replace(/[^a-zA-Z]/g, '');
+}
+
 window.onload = async function() {
     configs = await window.api.getConfigs();
     addEventListenner2list();
