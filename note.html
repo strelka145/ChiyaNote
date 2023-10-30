@@ -16,6 +16,7 @@
     <script src="library/table.js"></script>
     <script src="scripts/calculator.js"></script>
     <script src="scripts/imageeditor.js"></script>
+    <script src="scripts/delimiterLine.js"></script>
     
     <script src="library/mousetrap/mousetrap.min.js"></script>
 
@@ -216,6 +217,10 @@
                         class: CodeTool,
                         shortcut: configs.shortcut[9] === "" ? undefined : configs.shortcut[9],
                     },
+                    delimiter:{
+                        class: Delimiter,
+                        shortcut: configs.shortcut[10] === "" ? undefined : configs.shortcut[10],
+                    }
                 };
 
                 editor = new EditorJS({

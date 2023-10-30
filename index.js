@@ -35,7 +35,7 @@ const { title } = require('process');
 const {resolve} = require('path');
 const Store = require('electron-store');
 const store = new Store();
-const editorMenuItems=["Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code"];
+const editorMenuItems=["Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code","Delimiter"];
 if(!(store.has('configs'))){
   store.set('configs', {
     label:editorMenuItems,
