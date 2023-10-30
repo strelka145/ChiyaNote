@@ -8,7 +8,22 @@ function createDirectoryIfNotExists(dirPath) {
     console.error(err);
   }
 }
-
+function completeIndexArray(arr, indices) {
+  let missingIndices = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (!indices.includes(i)) {
+      missingIndices.push(i);
+    }
+  }
+  return indices.concat(missingIndices);
+}
+function matchArrayLength(arr1, arr2) {
+  const lengthDifference = arr1.length - arr2.length;
+  for (let i = 0; i < lengthDifference; i++) {
+    arr2.push("");
+  }
+  return arr2;
+}
 
 const sqlite3 = require('sqlite3').verbose();
 const { app, BrowserWindow, ipcMain , Menu, dialog, shell} = require('electron');
@@ -28,6 +43,14 @@ if(!(store.has('configs'))){
     shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
     saveDirectory:app.getPath('userData'),
     tableName:"noteDB"
+  });
+}else if((editorMenuItems.length!=store.get('configs').order)||(editorMenuItems.length!=store.get('configs').shortcut)){
+  store.set('configs', {
+    label:editorMenuItems,
+    order:completeIndexArray(editorMenuItems,store.get('configs').order),
+    shortcut:matchArrayLength(editorMenuItems,store.get('configs').shortcut),//An array of empty strings with a length of editorMenuItems.length.
+    saveDirectory:store.get('configs').saveDirectory,
+    tableName:store.get('configs').tableName,
   });
 }
 createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'database'));
