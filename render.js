@@ -13,19 +13,18 @@ async function reloadContents(input){
 
     rows.forEach((row) => {
         const divElement = document.createElement("div");
-        divElement.setAttribute("name","content");
+        divElement.classList.add("search-item");
         divElement.setAttribute("data-id",row.id);
-        const h1Element = document.createElement("h1");
-        const h1Text = document.createTextNode(row.name);
-        h1Element.appendChild(h1Text);
+        const title = document.createElement("div");
+        title.classList.add("search-title");
+        title.textContent=row.name;
         
-        const pElement = document.createElement("p");
-        const pText = document.createTextNode(truncateString(row.maintext,100));
-        pElement.appendChild(pText);
-        divElement.appendChild(h1Element);
-        divElement.appendChild(pElement);
+        const description = document.createElement("div");
+        description.classList.add("search-description");
+        description.textContent=truncateString(row.maintext,100);
+        divElement.appendChild(title);
+        divElement.appendChild(description);
         divElement.addEventListener("dblclick", function(event){
-            console.log(event.currentTarget);
             window.api.openNote(event.currentTarget.dataset.id);
         });
         divElement.addEventListener('contextmenu', (e) => {

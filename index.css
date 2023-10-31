@@ -71,16 +71,37 @@ body, html {
 .serch_input:focus {
     border: 2px solid black;
 }
-h1{
-    margin: 32px 32px 8px 32px;
-    font-family: serif;
-    color: #222222;
+.search-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-p{
-    margin: 0px 40px 0px 52px;
-    font-family: serif;
-    color: #222222;
+
+.search-item {
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
-div[name="content"]{
+
+.search-item:hover {
+    background-color: #e9ecef;
+}
+
+.search-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #343a40;
+}
+
+.search-description {
+    color: #6c757d;
+}
+.search-item{
     cursor: pointer;
 }
