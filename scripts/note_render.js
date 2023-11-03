@@ -25,7 +25,7 @@ class PCR{
         div_husky.setAttribute("style","display:none");
         if(this.data.temperature){
             input_box.value= this.data.temperature;
-            let graph = new Husky(input_box.value);
+            let graph = new Husky(input_box.value,{scale:0.6});
             graph.makeGraph(div_husky);
             const image = document.createElement('img');
             const textEncoder = new TextEncoder('utf-8');
@@ -49,7 +49,7 @@ class PCR{
             const name=event.currentTarget.getAttribute("name");
             const div_husky=document.querySelectorAll('div[name="'+name+'"]')[0];
             const input_box=document.querySelectorAll('textarea[name="'+name+'"]')[0];
-            let graph = new Husky(input_box.value);
+            let graph = new Husky(input_box.value,{scale:0.6});
             graph.makeGraph(div_husky);
             //CSS in Editor.js is also reflected in embedded SVG, so SVG is encoded to base64 and embedded in img tags.
             const image = document.createElement('img');
