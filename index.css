@@ -101,6 +101,7 @@ body, html {
 
 .search-description {
     color: #6c757d;
+    overflow-wrap: break-word;
 }
 .search-item{
     cursor: pointer;
