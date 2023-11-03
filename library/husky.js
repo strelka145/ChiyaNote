@@ -1,5 +1,5 @@
 class Husky {
-    constructor(table){
+    constructor(table,options={}){
         let separatedStrings = table.split(/;/);
         separatedStrings.pop();
         if(separatedStrings.length==1){
@@ -17,10 +17,16 @@ class Husky {
         }
         this.width=125*this.temperature_list.length;
         this.svgElement =document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        this.svgElement.setAttribute("height", "400");
-        this.svgElement.setAttribute("width", this.width);
+        if(options.scale){
+            this.scale=options.scale;
+        }else{
+            this.scale=1;
+        }
+        this.heighest=0;
+        this.svgElement.setAttribute("height", (400-this.heighest)*this.scale);
+        this.svgElement.setAttribute("width", this.width*this.scale);
         this.svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        this.svgElement.setAttribute("viewBox", "0 0 "+this.width+" 400");
+        this.svgElement.setAttribute("viewBox", "0 "+this.heighest+" "+this.width+" "+(400-this.heighest));
     }
 
     makeGraph(targetElement){
@@ -52,6 +58,11 @@ class Husky {
             "middle"
         );
 
+        this.heighest=Math.min(...this.#calculateHeatRetentionCoordinates(this.#calculateTemperatureGraphCoordinates(this.#convertTemperatureToSVGCoordinates(this.temperature_list))).map(coord => coord[1]))-30;
+        this.svgElement.setAttribute("height", (400-this.heighest)*this.scale);
+        this.svgElement.setAttribute("width", this.width*this.scale);
+        this.svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        this.svgElement.setAttribute("viewBox", "0 "+this.heighest+" "+this.width+" "+(400-this.heighest));
         targetElement.innerHTML = '';
         targetElement.appendChild(this.svgElement);
     }
