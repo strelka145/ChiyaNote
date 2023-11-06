@@ -37,18 +37,18 @@ async function reloadContents(input){
 
 window.api.rename((_event, value) => {
     const divWithId = document.querySelector('[data-id="'+String(value.id)+'"]');
-    const h1Element = divWithId.querySelector('h1');
-    h1Element.setAttribute("style","display:none;");
+    const titleElement = divWithId.querySelector('.search-title');
+    titleElement.setAttribute("style","display:none;");
     const textBox = document.createElement('input');
     textBox.type = 'text';
     textBox.setAttribute("name",String(value.id));
-    textBox.value=h1Element.textContent;
+    textBox.value=titleElement.textContent;
     divWithId.prepend(textBox);
     textBox.addEventListener("blur", function(event){
         const divWithId = document.querySelector('[data-id="'+event.currentTarget.getAttribute('name')+'"]');
-        const h1Element = divWithId.querySelector('h1');
-        h1Element.textContent=event.currentTarget.value;
-        h1Element.setAttribute("style","");
+        const titleElement = divWithId.querySelector('.search-title');
+        titleElement.textContent=event.currentTarget.value;
+        titleElement.setAttribute("style","");
         window.api.renameTable({
             name:event.currentTarget.value,
             id:event.currentTarget.getAttribute('name')
