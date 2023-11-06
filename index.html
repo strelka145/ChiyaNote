@@ -50,6 +50,22 @@
                     <section class="settings-section" id="sqlite-settings">
                         <h2>SQLite</h2>
                         <div class="setting-item">
+                            <label>Sort</label>
+                            <p class="description">Please specify which criteria you would like the search results to be sorted by.</p>
+                            <select name="sortitem" id="sort-item">
+                                <option value="id">By creation date</option>
+                                <option value="name">Title</option>
+                                <option value="maintext">Main text</option>
+                                <option value="right">Header-right</option>
+                                <option value="center">Header-center</option>
+                                <option value="left">Header-left</option>
+                            </select>
+                            <select name="order" id="sort-order">
+                                <option value="ascending">Ascending</option>
+                                <option value="descending">Descending</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
                             <label>Table name (Alphabets only)</label>
                             <input type="text" id="TableName" oninput="validateAlphabetOnly(this)">
                             <p class="description">Even if you change to a new table name, the previous data is saved under the old table name. If you wish to transfer the previous data as well, please use sqlite to move the data.</p>

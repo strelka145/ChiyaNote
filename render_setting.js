@@ -108,6 +108,8 @@ function setSettings(){
         shortcut:getInputValuesFromTable(document.getElementById("menu_table")),
         saveDirectory:document.getElementById("saveD").value,
         tableName:document.getElementById("TableName").value,
+        sortBy:document.getElementById("sort-item").value,
+        sortOrder:document.getElementById("sort-order").value,
     });
 }
 
@@ -130,6 +132,8 @@ window.onload = async function() {
     generateTableRows(configs.label, configs.order, configs.shortcut, document.getElementById("menu_table"));
     document.getElementById("saveD").value=configs.saveDirectory;
     document.getElementById("TableName").value=configs.tableName;
+    document.getElementById("sort-item").value=configs.sortBy;
+    document.getElementById("sort-order").value=configs.sortOrder;
 }
 
 let configs;

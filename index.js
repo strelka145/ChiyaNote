@@ -24,6 +24,15 @@ function matchArrayLength(arr1, arr2) {
   }
   return arr2;
 }
+function mergeObjects(target, source) {
+  const merged = { ...target };
+  Object.keys(source).forEach((key) => {
+    if (!merged.hasOwnProperty(key)) {
+      merged[key] = source[key];
+    }
+  });
+  return merged;
+}
 
 const sqlite3 = require('sqlite3').verbose();
 const { app, BrowserWindow, ipcMain , Menu, dialog, shell} = require('electron');
@@ -36,23 +45,21 @@ const {resolve} = require('path');
 const Store = require('electron-store');
 const store = new Store();
 const editorMenuItems=["Heading","List","PCR temp","Table","Spread sheet","Calculator","Image editor","Checklist","Quote","Code","Delimiter"];
+const configTemplate={
+  label:editorMenuItems,
+  order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
+  shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
+  saveDirectory:app.getPath('userData'),
+  tableName:"noteDB",
+  sortBy:"id",
+  sortOrder:"descending"
+};
 if(!(store.has('configs'))){
-  store.set('configs', {
-    label:editorMenuItems,
-    order:Array.from({ length: editorMenuItems.length }, (_, i) => i),//Create an integer sequence representing the order of the menus from the number of menus.
-    shortcut:Array(editorMenuItems.length).fill(''),//An array of empty strings with a length of editorMenuItems.length.
-    saveDirectory:app.getPath('userData'),
-    tableName:"noteDB"
-  });
-}else if((editorMenuItems.length!=store.get('configs').order)||(editorMenuItems.length!=store.get('configs').shortcut)){
-  store.set('configs', {
-    label:editorMenuItems,
-    order:completeIndexArray(editorMenuItems,store.get('configs').order),
-    shortcut:matchArrayLength(editorMenuItems,store.get('configs').shortcut),//An array of empty strings with a length of editorMenuItems.length.
-    saveDirectory:store.get('configs').saveDirectory,
-    tableName:store.get('configs').tableName,
-  });
+  store.set('configs', configTemplate);
+}else{
+  store.set('configs', mergeObjects(store.get('configs'), configTemplate));
 }
+
 createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'database'));
 createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'data'));
 const db = new sqlite3.Database(path.join(store.get('configs').saveDirectory, 'database', 'database'));
@@ -428,11 +435,16 @@ ipcMain.handle('search', (event, data) => {
     db.serialize(() => {
       const searchQuery = data;
       let query,searchArray;
+      const validColumns = ["id", "path", "name", "maintext", "right", "center", "left"];
+      if (!validColumns.includes(store.get("configs").sortBy) || (store.get("configs").sortOrder !== 'ascending' && store.get("configs").sortOrder !== 'descending')){
+        return reject(new Error('Invalid column name or sort order'));
+      }
+      const sortOrder = store.get("configs").sortOrder === 'ascending' ? 'ASC' : 'DESC';
       if (data==""){
-        query = `SELECT * FROM ${store.get("configs").tableName} ORDER BY id DESC`;
+        query = `SELECT * FROM ${store.get("configs").tableName} ORDER BY ${store.get("configs").sortBy} ${sortOrder}`;
         searchArray=[];
       }else{
-        query = `SELECT * FROM ${store.get("configs").tableName} WHERE ${store.get("configs").tableName} MATCH ?  ORDER BY id DESC`;
+        query = `SELECT * FROM ${store.get("configs").tableName} WHERE ${store.get("configs").tableName} MATCH ?  ORDER BY ${store.get("configs").sortBy} ${sortOrder}`;
         searchArray=[searchQuery];
       }
       db.all(query, searchArray, (err, rows) => {
