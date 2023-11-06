@@ -52,18 +52,18 @@
 }
 
 .drag-list {
-  border: 2px solid black;    /* 囲む線の太さと色 */
-  border-radius: 10px;        /* 角の丸みの大きさ */
-  padding: 10px;              /* 囲む線とリストの内容の間の隙間 */
-  list-style-type: none;      /* デフォルトのリストマーク（点）を非表示にする */
-  width: 200px;         /* コンテンツに合わせて幅を自動調整 */
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  list-style-type: none;
+  width: 200px;
 }
 
 .drag-list li {
-  margin-bottom: 5px;         /* 各リスト項目の下の隙間 */
-  padding: 5px;               /* リスト項目の内側の隙間 */
-  background-color: #f5f5f5; /* リスト項目の背景色 */
-  border-radius: 5px;        /* リスト項目の角の丸み */
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
   text-align: center;
 }
 
@@ -122,4 +122,18 @@
 
 #apply-button:hover {
     background-color: #0056b3;
+}
+
+select {
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  appearance: none;
+}
+
+select:focus {
+  border-color: #007BFF;
+  outline: none;
 }
