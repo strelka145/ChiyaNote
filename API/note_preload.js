@@ -12,4 +12,6 @@ contextBridge.exposeInMainWorld('noteAPI',{
     openImageEditor: (data) => ipcRenderer.send('openImageEditor',data),
     setImage: (data) => ipcRenderer.on('setImage', data),
     getConfigs: async () => await ipcRenderer.invoke('getConfigs'),
+    unsave: () => ipcRenderer.send('unsave'),
+    resetUnsaveFlag: (callback) => ipcRenderer.on('resetUnsaveFlag', callback),
 });

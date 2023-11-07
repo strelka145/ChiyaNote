@@ -107,6 +107,8 @@ const template = [
               message:"This operation is possible only in the editor window."
             });
           }else{
+            browserWindow.setTitle(browserWindow.getTitle().startsWith("* ") ? browserWindow.getTitle().substring(2) : browserWindow.getTitle());
+            browserWindow.webContents.send('resetUnsaveFlag');
             browserWindow.webContents.send('save', browserWindow.id);
           }
           
@@ -607,4 +609,8 @@ ipcMain.handle('selctDir', async(event) => {
     properties: ['openFile', 'openDirectory']
   });
   return path.filePaths[0];
+});
+
+ipcMain.on('unsave', async(event)=>{
+  BrowserWindow.fromWebContents(event.sender).setTitle("* "+BrowserWindow.fromWebContents(event.sender).getTitle());
 });

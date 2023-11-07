@@ -75,7 +75,14 @@ class PCR{
     }
 }
 
+let isUnsaveEdit=false;
 
+function unsaveEdit(){
+    if(!isUnsaveEdit){
+        isUnsaveEdit=true;
+        window.noteAPI.unsave();
+    }
+}
 
 async function saveFile(){
     await editor.save().then((outputData) => {
@@ -165,4 +172,8 @@ window.noteAPI.setImage((_event, value) => {
     let img = element.querySelector('img');
     console.log(value.data);
     img.setAttribute("src",value.data);
+});
+
+window.noteAPI.resetUnsaveFlag((_event, value) => {
+    isUnsaveEdit=false;
 })
