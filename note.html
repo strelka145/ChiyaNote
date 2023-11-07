@@ -230,7 +230,10 @@
                         new Undo({ editor });
                     },
                     tools:reorderObjectByArray(menuObj,configs.order),
-                    data:JSON.parse(dataValue)
+                    data:JSON.parse(dataValue),
+                    onChange: () =>{
+                        unsaveEdit();
+                    }
                 });
             }
         
