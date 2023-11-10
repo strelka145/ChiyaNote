@@ -61,8 +61,9 @@ document.getElementById('btnClear').addEventListener('click', function() {
 
 document.getElementById('btnSave').addEventListener('click', function() {
     var base64Data = canvas.toDataURL({
-        format: 'png',
-        quality: 1
+        format: 'webp',
+        quality: 1,
+        multiplier: 3
     });
     const urlParams = new URLSearchParams(window.location.search);
     window.ImageEditorAPI.sendImage({
