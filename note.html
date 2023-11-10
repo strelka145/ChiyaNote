@@ -96,6 +96,9 @@
             font-size: 15pt;
             width: 100%;
         }
+        .codeflask{
+            z-index: 0;
+        }
         @media print{
             .ce-toolbar__actions{
                 display: none;
@@ -190,7 +193,7 @@
                     shortcut: configs.shortcut[8] === "" ? undefined : configs.shortcut[8],
                 },
                 code: {
-                    class: CodeTool,
+                    class: editorjsCodeflask,
                     shortcut: configs.shortcut[9] === "" ? undefined : configs.shortcut[9],
                 },
                 delimiter:{
