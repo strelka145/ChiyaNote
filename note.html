@@ -145,10 +145,13 @@
         document.getElementById("centerHead").value=urlParams.get('center');
         document.getElementById("rightHead").value=urlParams.get('right');
         let editor;
-        const menuObj=  {
+
+        window.onload = async function() {
+            const configs = await window.noteAPI.getConfigs();
+            const menuObj=  {
                 header: {
                     class: Header,
-                    shortcut: 'CMD+SHIFT+H',
+                    shortcut: configs.shortcut[0] === "" ? undefined : configs.shortcut[0],
                 },
                 list: {
                     class: NestedList,
@@ -156,86 +159,58 @@
                     config: {
                         defaultStyle: 'unordered'
                     },
-                    shortcut: 'CMD+SHIFT+L',
+                    shortcut: configs.shortcut[1] === "" ? undefined : configs.shortcut[1],
                 },
-                pcr: PCR,
+                pcr: {
+                    class: PCR,
+                    shortcut: configs.shortcut[2] === "" ? undefined : configs.shortcut[2],
+                },
                 table: {
                     class: Table,
-                    shortcut: 'CMD+SHIFT+T',
+                    shortcut: configs.shortcut[3] === "" ? undefined : configs.shortcut[3],
                 },
-                spread_sheet: Jspreadsheet,
-                calculator:Calc,
-                image: ImageEditor,
-                checklist: Checklist,
-                quote: Quote,
-                code: CodeTool,
+                spread_sheet: {
+                    class: Jspreadsheet,
+                    shortcut: configs.shortcut[4] === "" ? undefined : configs.shortcut[4],
+                },
+                calculator:{
+                    class: Calc,
+                    shortcut: configs.shortcut[5] === "" ? undefined : configs.shortcut[5],
+                },
+                image: {
+                    class: ImageEditor,
+                    shortcut: configs.shortcut[6] === "" ? undefined : configs.shortcut[6],
+                },
+                checklist: {
+                    class: Checklist,
+                    shortcut: configs.shortcut[7] === "" ? undefined : configs.shortcut[7],
+                },
+                quote: {
+                    class: Quote,
+                    shortcut: configs.shortcut[8] === "" ? undefined : configs.shortcut[8],
+                },
+                code: {
+                    class: CodeTool,
+                    shortcut: configs.shortcut[9] === "" ? undefined : configs.shortcut[9],
+                },
+                delimiter:{
+                    class: Delimiter,
+                    shortcut: configs.shortcut[10] === "" ? undefined : configs.shortcut[10],
+                }
             };
 
-            window.onload = async function() {
-                const configs = await window.noteAPI.getConfigs();
-                const menuObj=  {
-                    header: {
-                        class: Header,
-                        shortcut: configs.shortcut[0] === "" ? undefined : configs.shortcut[0],
-                    },
-                    list: {
-                        class: NestedList,
-                        inlineToolbar: true,
-                        config: {
-                            defaultStyle: 'unordered'
-                        },
-                        shortcut: configs.shortcut[1] === "" ? undefined : configs.shortcut[1],
-                    },
-                    pcr: {
-                        class: PCR,
-                        shortcut: configs.shortcut[2] === "" ? undefined : configs.shortcut[2],
-                    },
-                    table: {
-                        class: Table,
-                        shortcut: configs.shortcut[3] === "" ? undefined : configs.shortcut[3],
-                    },
-                    spread_sheet: {
-                        class: Jspreadsheet,
-                        shortcut: configs.shortcut[4] === "" ? undefined : configs.shortcut[4],
-                    },
-                    calculator:{
-                        class: Calc,
-                        shortcut: configs.shortcut[5] === "" ? undefined : configs.shortcut[5],
-                    },
-                    image: {
-                        class: ImageEditor,
-                        shortcut: configs.shortcut[6] === "" ? undefined : configs.shortcut[6],
-                    },
-                    checklist: {
-                        class: Checklist,
-                        shortcut: configs.shortcut[7] === "" ? undefined : configs.shortcut[7],
-                    },
-                    quote: {
-                        class: Quote,
-                        shortcut: configs.shortcut[8] === "" ? undefined : configs.shortcut[8],
-                    },
-                    code: {
-                        class: CodeTool,
-                        shortcut: configs.shortcut[9] === "" ? undefined : configs.shortcut[9],
-                    },
-                    delimiter:{
-                        class: Delimiter,
-                        shortcut: configs.shortcut[10] === "" ? undefined : configs.shortcut[10],
-                    }
-                };
-
-                editor = new EditorJS({
-                    holder: 'editor',
-                    onReady: () => {
-                        new Undo({ editor });
-                    },
-                    tools:reorderObjectByArray(menuObj,configs.order),
-                    data:JSON.parse(dataValue),
-                    onChange: () =>{
-                        unsaveEdit();
-                    }
-                });
-            }
+            editor = new EditorJS({
+                holder: 'editor',
+                onReady: () => {
+                    new Undo({ editor });
+                },
+                tools:reorderObjectByArray(menuObj,configs.order),
+                data:JSON.parse(dataValue),
+                onChange: () =>{
+                    unsaveEdit();
+                }
+            });
+        }
         
     </script>
 </body>
