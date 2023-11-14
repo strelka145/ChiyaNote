@@ -12,7 +12,7 @@ A simple application for writing, recording, and searching lab notebooks.
 
 ## Donation
 
-The creator is a student with no money, so if this was helpful, please donate.
+I am a student with no money, so if this was helpful, please donate.
 
 
 https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AYLS4ETZTU4DA
