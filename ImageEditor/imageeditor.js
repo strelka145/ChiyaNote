@@ -45,7 +45,8 @@ function addTextToCanvas(textContent) {
         left: 20,
         top: 60,
         fontSize: 20,
-        editable: true
+        editable: true,
+        fontFamily: 'Segoe UI',
     });
     canvas.add(text);
     canvas.renderAll();
