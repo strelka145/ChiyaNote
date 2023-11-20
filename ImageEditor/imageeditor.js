@@ -47,6 +47,7 @@ function addTextToCanvas(textContent) {
         fontSize: 20,
         editable: true,
         fontFamily: 'Segoe UI',
+        snapAngle: 15,
     });
     canvas.add(text);
     canvas.renderAll();
