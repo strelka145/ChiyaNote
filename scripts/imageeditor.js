@@ -40,7 +40,8 @@ class ImageEditor{
         const img = element.querySelector('img');
         const src = img.src;
         return {
-            image:src
+            image:src,
+            json:img.getAttribute('data-json')
         }
     }
 

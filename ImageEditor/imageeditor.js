@@ -68,7 +68,8 @@ document.getElementById('btnSave').addEventListener('click', function() {
     const urlParams = new URLSearchParams(window.location.search);
     window.ImageEditorAPI.sendImage({
         id:urlParams.get('id'),
-        data:base64Data
+        data:base64Data,
+        json:canvas.toJSON(),
     });
 });
 
