@@ -52,6 +52,32 @@ function addTextToCanvas(textContent) {
     canvas.renderAll();
 }
 
+document.onkeydown = function(e) {
+    var isCtrlOrCmd = e.ctrlKey || e.metaKey; 
+    if(isCtrlOrCmd && e.key === 'c'){
+        if(canvas.getActiveObject()){
+            canvas.getActiveObject().clone(function(cloned) {
+                copiedObject = cloned;
+            });
+        }
+    }
+
+    if(isCtrlOrCmd && e.key === 'v'){
+        if(copiedObject){
+            copiedObject.clone(function(clonedObj){
+                canvas.add(clonedObj);
+                clonedObj.set({
+                    left: clonedObj.left + 10,
+                    top: clonedObj.top + 10,
+                    evented: true,
+                });
+                canvas.setActiveObject(clonedObj);
+                canvas.requestRenderAll();
+            });
+        }
+    }
+};
+
 document.getElementById('btnAddText').addEventListener('click', function() {
     addTextToCanvas('TextBox');
 });
