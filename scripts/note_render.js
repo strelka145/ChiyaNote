@@ -168,6 +168,7 @@ window.noteAPI.setImage((_event, value) => {
     let element = document.getElementById(value.id);
     let img = element.querySelector('img');
     img.setAttribute("src",value.data);
+    img.setAttribute("data-json",JSON.stringify(value.json))
 });
 
 window.noteAPI.resetUnsaveFlag((_event, value) => {
