@@ -38,6 +38,7 @@
             console.log(urlParams.get('json'));
             if (urlParams.get('json')!=""){
                 canvas.loadFromJSON(urlParams.get('json'), canvas.renderAll.bind(canvas));
+                window.resizeTo(JSON.parse(urlParams.get('json')).width, JSON.parse(urlParams.get('json')).height);
             }
             function resizeCanvas() {
                 canvas.setWidth(window.innerWidth);

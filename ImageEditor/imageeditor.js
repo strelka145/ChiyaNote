@@ -69,7 +69,7 @@ document.getElementById('btnSave').addEventListener('click', function() {
     window.ImageEditorAPI.sendImage({
         id:urlParams.get('id'),
         data:base64Data,
-        json:canvas.toJSON(),
+        json:canvas.toJSON(['width', 'height']),
     });
 });
 
