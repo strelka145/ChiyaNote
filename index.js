@@ -576,7 +576,8 @@ ipcMain.on('openImageEditor', async(event,data) => {
     });
     childWindow.loadFile("ImageEditor/ImageEditor.html",{
       query:{
-        id:data.id
+        id:data.id,
+        json:data.json
        }
     });
 });
@@ -585,7 +586,8 @@ ipcMain.on('sendImage', async(event,data) => {
   const targetWindow = BrowserWindow.fromWebContents(event.sender).getParentWindow();
   targetWindow.webContents.send('setImage', {
     id:data.id,
-    data:data.data
+    data:data.data,
+    json:data.json
   });
   BrowserWindow.fromWebContents(event.sender).close();
 });

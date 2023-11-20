@@ -33,7 +33,12 @@
         <button id="btnClear" class="svg-button" title="Reset Canvas"></button>
         <button id="btnSave" class="svg-button" title="Finish Editing"></button>
         <script>
+            const urlParams = new URLSearchParams(window.location.search);
             const canvas = new fabric.Canvas('c');
+            console.log(urlParams.get('json'));
+            if (urlParams.get('json')!=""){
+                canvas.loadFromJSON(urlParams.get('json'), canvas.renderAll.bind(canvas));
+            }
             function resizeCanvas() {
                 canvas.setWidth(window.innerWidth);
                 canvas.setHeight(window.innerHeight);
