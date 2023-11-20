@@ -111,9 +111,7 @@ async function saveNewFile(){
     const inputNameElement=document.getElementById("inputName");
     let jsonData;
     await editor.save().then((outputData) => {
-        console.log(JSON.stringify(outputData, null , "\t"));
         jsonData=JSON.stringify(outputData, null , "\t");
-        console.log(jsonData);
     }).catch((error) => {
         console.log('Saving failed: ', error)
     });
@@ -126,7 +124,6 @@ async function saveNewFile(){
         left:document.getElementById("leftHead").value,
     };
     id=await window.noteAPI.newSave(data);
-    console.log(id);
     const titleData={
         windowid:windowID,
         title:inputNameElement.value
@@ -170,7 +167,6 @@ window.noteAPI.onPrint((_event, value) => {
 window.noteAPI.setImage((_event, value) => {
     let element = document.getElementById(value.id);
     let img = element.querySelector('img');
-    console.log(value.data);
     img.setAttribute("src",value.data);
 });
 
