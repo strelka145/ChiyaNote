@@ -45,11 +45,39 @@ function addTextToCanvas(textContent) {
         left: 20,
         top: 60,
         fontSize: 20,
-        editable: true
+        editable: true,
+        fontFamily: 'Segoe UI',
+        snapAngle: 15,
     });
     canvas.add(text);
     canvas.renderAll();
 }
+
+document.onkeydown = function(e) {
+    var isCtrlOrCmd = e.ctrlKey || e.metaKey; 
+    if(isCtrlOrCmd && e.key === 'c'){
+        if(canvas.getActiveObject()){
+            canvas.getActiveObject().clone(function(cloned) {
+                copiedObject = cloned;
+            });
+        }
+    }
+
+    if(isCtrlOrCmd && e.key === 'v'){
+        if(copiedObject){
+            copiedObject.clone(function(clonedObj){
+                canvas.add(clonedObj);
+                clonedObj.set({
+                    left: clonedObj.left + 10,
+                    top: clonedObj.top + 10,
+                    evented: true,
+                });
+                canvas.setActiveObject(clonedObj);
+                canvas.requestRenderAll();
+            });
+        }
+    }
+};
 
 document.getElementById('btnAddText').addEventListener('click', function() {
     addTextToCanvas('TextBox');
@@ -69,7 +97,7 @@ document.getElementById('btnSave').addEventListener('click', function() {
     window.ImageEditorAPI.sendImage({
         id:urlParams.get('id'),
         data:base64Data,
-        json:canvas.toJSON(),
+        json:canvas.toJSON(['width', 'height']),
     });
 });
 
