@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "npx electron .",
-    "license": "yarn licenses generate-disclaimer>Licenses/nodeLicenses&&node license.js"
+    "license": "yarn licenses generate-disclaimer>Licenses/nodeLicenses&&node combineLicenses.js"
   },
   "author": "strelka",
   "license": "MIT",
