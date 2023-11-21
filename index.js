@@ -34,6 +34,7 @@ function mergeObjects(target, source) {
   return merged;
 }
 
+const url = require('url');
 const sqlite3 = require('sqlite3').verbose();
 const { app, BrowserWindow, ipcMain , Menu, dialog, shell} = require('electron');
 const path = require('path');
@@ -64,6 +65,7 @@ createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'databa
 createDirectoryIfNotExists(path.join(store.get('configs').saveDirectory, 'data'));
 const db = new sqlite3.Database(path.join(store.get('configs').saveDirectory, 'database', 'database'));
 let windows = [];
+let IDs = [];
 const isMac = process.platform === 'darwin';
 const savePath=path.join(store.get('configs').saveDirectory, 'data/');
 let currentContentID;
@@ -291,46 +293,63 @@ function focusNextWindow() {
 }
 
 async function openNoteWindow(id) {
-  let title;
-  let json_data;
-  let header;
-  if (id<0){
-    title="New file";
-    json_data="{}";
-    header={
-      right:"",
-      center:"",
-      left:""
+  if (IDs.includes(id)){
+    let indexToRemove = IDs.indexOf(id) + 1;
+    if (indexToRemove < windows.length) {
+      windows[indexToRemove].focus();
     }
   }else{
-    let db_data=await getDataFromID(id);
-    title=db_data.name;
-    header={
-      right:db_data.right,
-      center:db_data.center,
-      left:db_data.left,
+    let title;
+    let json_data;
+    let header;
+    if (id<0){
+      title="New file";
+      json_data="{}";
+      header={
+        right:"",
+        center:"",
+        left:""
+      }
+    }else{
+      let db_data=await getDataFromID(id);
+      title=db_data.name;
+      header={
+        right:db_data.right,
+        center:db_data.center,
+        left:db_data.left,
+      }
+      json_data=fs.readFileSync(path.join(savePath,String(id)+".chn"), 'utf8');
     }
-    json_data=fs.readFileSync(path.join(savePath,String(id)+".chn"), 'utf8');
+    const noteWindow = new BrowserWindow({
+      title:title,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'API/note_preload.js')
+      }
+    });
+    noteWindow.loadFile("note.html",{
+      query:{ 
+        data:json_data,
+        id:id,
+        windowID:noteWindow.id,
+        right:header.right,
+        center:header.center,
+        left:header.left,
+      }
+    });
+    noteWindow.on('close', (e) => {
+      const currentUrl = noteWindow.webContents.getURL();
+      const queryObject = url.parse(currentUrl, true).query;
+      let indexToRemove = IDs.indexOf(queryObject.id) + 1;
+      if (indexToRemove < windows.length) {
+        windows.splice(indexToRemove, 1);
+      }
+      IDs = IDs.filter(item => item != queryObject.id);
+    });
+    windows.push(noteWindow);
+    IDs.push(id);
   }
-  const noteWindow = new BrowserWindow({
-    title:title,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'API/note_preload.js')
-    }
-  });
-  noteWindow.loadFile("note.html",{
-    query:{ 
-      data:json_data,
-      id:id,
-      windowID:noteWindow.id,
-      right:header.right,
-      center:header.center,
-      left:header.left,
-     }
-  });
-  windows.push(noteWindow);
 }
 
 function createTableIfNotExists() {
